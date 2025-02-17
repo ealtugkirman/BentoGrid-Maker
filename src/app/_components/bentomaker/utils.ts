@@ -13,7 +13,13 @@ export const getAspectRatioClass = (ratio: string) => {
 export const getGeneratedCode = (settings: IGridSettings) => {
   const { columns, rows, gap, cornerType, aspectRatio } = settings;
 
-  const baseGridClass = `grid grid-cols-${columns} grid-rows-${rows} gap-${gap}`;
+  const gridStyles = [
+    'display: grid',
+    `grid-template-columns: repeat(${columns}, minmax(0, 1fr))`,
+    `grid-template-rows: repeat(${rows}, minmax(0, 1fr))`,
+    `gap: ${gap * 0.25}rem`
+  ].join(';');
+
   const cornerClass = cornerType === 'none' ? '' : `rounded-${cornerType}`;
   const aspectRatioClass = getAspectRatioClass(aspectRatio);
 
@@ -32,6 +38,6 @@ export const getGeneratedCode = (settings: IGridSettings) => {
     `  <div class="${itemClasses}">Grid Item ${i + 1}</div>`
   ).join('\n');
 
-  return `<div class="${baseGridClass}">\n${items}\n</div>`;
+  return `<div style="${gridStyles}" class="min-h-[400px] p-4">\n${items}\n</div>`;
 };
 

@@ -9,11 +9,14 @@ interface IGridPreviewProps {
 export const GridPreview: FC<IGridPreviewProps> = ({ gridSettings }) => {
   const { columns, rows, gap, cornerType, useImages, aspectRatio } = gridSettings;
 
-  const c = Math.max(1, Math.min(columns, 12));
-  const r = Math.max(1, Math.min(rows, 12));
-  const g = Math.max(0, gap);
+  // Create explicit grid-template-columns and grid-template-rows
+  const gridStyle = {
+    display: 'grid',
+    gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
+    gridTemplateRows: `repeat(${rows}, minmax(0, 1fr))`,
+    gap: `${gap * 0.25}rem`, // Convert gap to rem units
+  };
 
-  const baseGridClass = `grid grid-cols-${c} grid-rows-${r} gap-${g}`;
   const cornerClass = cornerType === 'none' ? '' : `rounded-${cornerType}`;
   const aspectRatioClass = getAspectRatioClass(aspectRatio);
 
@@ -21,8 +24,11 @@ export const GridPreview: FC<IGridPreviewProps> = ({ gridSettings }) => {
     `https://source.unsplash.com/random/800x600?sig=${index}`;
 
   return (
-    <div className={`${baseGridClass} min-h-[400px] bg-gray-900 rounded-lg p-4`}>
-      {[...Array(c * r)].map((_, index) => (
+    <div 
+      style={gridStyle} 
+      className="min-h-[400px] bg-gray-900 rounded-lg p-4"
+    >
+      {[...Array(columns * rows)].map((_, index) => (
         <div
           key={index}
           className={`
