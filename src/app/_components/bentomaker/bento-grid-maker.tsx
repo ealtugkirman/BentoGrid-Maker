@@ -64,7 +64,7 @@ const BentoGridMaker: FC = () => {
 
   return (
     <div className="space-y-8">
-      <Card className="bg-gray-800 border-gray-700">
+      <Card className="bg-black border-gray-800">
         <CardHeader>
           <CardTitle className="text-white">Control Panel</CardTitle>
         </CardHeader>
@@ -83,7 +83,7 @@ const BentoGridMaker: FC = () => {
               variant="outline"
               size="sm"
               onClick={handleResetSettings}
-              className="flex-1 border-gray-600 text-gray-200 hover:bg-gray-700"
+              className="flex-1 border-gray-800 text-gray-200 hover:bg-gray-900"
             >
               <RefreshCwIcon className="h-4 w-4 mr-2" />
               Reset
@@ -92,7 +92,7 @@ const BentoGridMaker: FC = () => {
         </CardContent>
       </Card>
 
-      <Card className="bg-gray-800 border-gray-700">
+      <Card className="bg-black border-gray-800">
         <CardHeader>
           <CardTitle className="text-white">Preview</CardTitle>
         </CardHeader>
@@ -101,14 +101,14 @@ const BentoGridMaker: FC = () => {
         </CardContent>
       </Card>
 
-      <Card className="bg-gray-800 border-gray-700">
+      <Card className="bg-black border-gray-800">
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-white">Generated Code</CardTitle>
           <Button
             variant="outline"
             size="sm"
             onClick={handleCopyCode}
-            className="border-gray-600 text-gray-200 hover:bg-gray-700"
+            className="border-gray-800 text-gray-200 hover:bg-gray-900"
           >
             {copied ? (
               <CheckIcon className="h-4 w-4" />
@@ -118,7 +118,7 @@ const BentoGridMaker: FC = () => {
           </Button>
         </CardHeader>
         <CardContent>
-          <pre className="bg-gray-900 rounded-lg p-4 overflow-x-auto text-gray-200">
+          <pre className="bg-gray-950 rounded-lg p-4 overflow-x-auto text-gray-200">
             <code>{getGeneratedCode(gridSettings)}</code>
           </pre>
         </CardContent>

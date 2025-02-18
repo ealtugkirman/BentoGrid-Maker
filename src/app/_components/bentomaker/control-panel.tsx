@@ -20,9 +20,9 @@ export const ControlPanel: FC<IControlPanelProps> = ({ gridSettings, onChange })
 
   return (
     <Tabs defaultValue="layout" className="space-y-4">
-      <TabsList className="w-full bg-gray-700 border-gray-600">
-        <TabsTrigger value="layout" className="flex-1 data-[state=active]:bg-gray-600">Layout</TabsTrigger>
-        <TabsTrigger value="style" className="flex-1 data-[state=active]:bg-gray-600">Style</TabsTrigger>
+      <TabsList className="w-full bg-gray-950 border-gray-800">
+        <TabsTrigger value="layout" className="flex-1 data-[state=active]:bg-gray-900">Layout</TabsTrigger>
+        <TabsTrigger value="style" className="flex-1 data-[state=active]:bg-gray-900">Style</TabsTrigger>
       </TabsList>
 
       <TabsContent value="layout" className="space-y-4">
@@ -30,10 +30,10 @@ export const ControlPanel: FC<IControlPanelProps> = ({ gridSettings, onChange })
           <div className="space-y-2">
             <Label className="text-gray-200">Columns</Label>
             <Select value={columns.toString()} onValueChange={(v) => updateSettings('columns', parseInt(v))}>
-              <SelectTrigger className="bg-gray-700 border-gray-600 text-gray-200">
+              <SelectTrigger className="bg-gray-950 border-gray-800 text-gray-200">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent className="bg-gray-700 border-gray-600">
+              <SelectContent className="bg-gray-950 border-gray-800">
                 {[2, 3, 4, 6].map(n => (
                   <SelectItem key={n} value={n.toString()}>{n} Columns</SelectItem>
                 ))}
@@ -44,10 +44,10 @@ export const ControlPanel: FC<IControlPanelProps> = ({ gridSettings, onChange })
           <div className="space-y-2">
             <Label className="text-gray-200">Rows</Label>
             <Select value={rows.toString()} onValueChange={(v) => updateSettings('rows', parseInt(v))}>
-              <SelectTrigger className="bg-gray-700 border-gray-600 text-gray-200">
+              <SelectTrigger className="bg-gray-950 border-gray-800 text-gray-200">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent className="bg-gray-700 border-gray-600">
+              <SelectContent className="bg-gray-950 border-gray-800">
                 {[1, 2, 3, 4].map(n => (
                   <SelectItem key={n} value={n.toString()}>{n} Rows</SelectItem>
                 ))}
@@ -58,10 +58,10 @@ export const ControlPanel: FC<IControlPanelProps> = ({ gridSettings, onChange })
           <div className="space-y-2">
             <Label className="text-gray-200">Gap Size</Label>
             <Select value={gap.toString()} onValueChange={(v) => updateSettings('gap', parseInt(v))}>
-              <SelectTrigger className="bg-gray-700 border-gray-600 text-gray-200">
+              <SelectTrigger className="bg-gray-950 border-gray-800 text-gray-200">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent className="bg-gray-700 border-gray-600">
+              <SelectContent className="bg-gray-950 border-gray-800">
                 <SelectItem value="0">None</SelectItem>
                 <SelectItem value="2">Small</SelectItem>
                 <SelectItem value="4">Medium</SelectItem>
@@ -73,10 +73,10 @@ export const ControlPanel: FC<IControlPanelProps> = ({ gridSettings, onChange })
           <div className="space-y-2">
             <Label className="text-gray-200">Aspect Ratio</Label>
             <Select value={aspectRatio} onValueChange={(v) => updateSettings('aspectRatio', v)}>
-              <SelectTrigger className="bg-gray-700 border-gray-600 text-gray-200">
+              <SelectTrigger className="bg-gray-950 border-gray-800 text-gray-200">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent className="bg-gray-700 border-gray-600">
+              <SelectContent className="bg-gray-950 border-gray-800">
                 <SelectItem value="1:1">Square (1:1)</SelectItem>
                 <SelectItem value="16:9">Widescreen (16:9)</SelectItem>
                 <SelectItem value="4:3">Standard (4:3)</SelectItem>
@@ -92,10 +92,10 @@ export const ControlPanel: FC<IControlPanelProps> = ({ gridSettings, onChange })
           <div className="space-y-2">
             <Label className="text-gray-200">Corner Style</Label>
             <Select value={cornerType} onValueChange={(v) => updateSettings('cornerType', v as CornerType)}>
-              <SelectTrigger className="bg-gray-700 border-gray-600 text-gray-200">
+              <SelectTrigger className="bg-gray-950 border-gray-800 text-gray-200">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent className="bg-gray-700 border-gray-600">
+              <SelectContent className="bg-gray-950 border-gray-800">
                 <SelectItem value="none">No Corners</SelectItem>
                 <SelectItem value="sm">Subtle</SelectItem>
                 <SelectItem value="md">Medium</SelectItem>
