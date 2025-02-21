@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import GoogleAnalytics from "@/Google";
 import { Navbar } from "@/app/_components/Navbar/navbar";
+import { Analytics } from "@vercel/analytics/react"
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -85,6 +87,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <Navbar />
         <GoogleAnalytics />
+        <Analytics />
         {children}
       </body>
     </html>
