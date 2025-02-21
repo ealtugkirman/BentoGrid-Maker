@@ -54,7 +54,7 @@ const BentoGridMaker: FC = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="mx-auto px-4 py-8">
       <div className="grid gap-8 lg:grid-cols-2">
         <Card className="lg:sticky lg:top-4">
           <CardHeader>
@@ -65,12 +65,12 @@ const BentoGridMaker: FC = () => {
           </CardContent>
         </Card>
 
-        <div className="space-y-8">
+        <div className="space-y-8 ">
           <Card>
             <CardHeader>
               <CardTitle>Preview</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className='h-full w-80' >
               <GridPreview gridSettings={gridSettings} />
             </CardContent>
           </Card>

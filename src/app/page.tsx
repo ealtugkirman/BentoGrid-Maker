@@ -8,15 +8,17 @@ const page = () => {
   const theme = useTheme();
   const shadowColor = theme.resolvedTheme === "white" ? "white" : "white";
   return (
-    <div className="min-h-screen bg-black px-4 py-16">
-      <div className="max-w-4xl mx-auto">
-        <BackGround />
-        <h1 className="text-balance py-6 text-center text-white text-5xl font-semibold leading-none tracking-tighter sm:text-6xl">
+    <div className="min-h-screen bg-black flex flex-col">
+      <BackGround />
+      <div className="py-4">
+        <h1 className="text-balance text-center text-white text-4xl font-semibold leading-none tracking-tighter sm:text-5xl">
           Bento Grid {" "}
           <LineShadowText className="" shadowColor={shadowColor}>
-             Maker 
+            Maker 
           </LineShadowText>
         </h1>
+      </div>
+      <div className="flex-1 overflow-hidden">
         <BentoGridMaker />
       </div>
     </div>

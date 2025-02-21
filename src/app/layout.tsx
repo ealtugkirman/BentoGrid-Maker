@@ -14,36 +14,36 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  metadataBase: new URL("https://bentotailwind.com/"),
+  metadataBase: new URL("https://maker.bentotailwind.com/"),
 
   title: {
-    template: "%s | Bento Grid Maker | Create Beautiful Grid Layouts",
-    default: "Bento Grid Maker | Create Beautiful Grid Layouts with Tailwind CSS",
+    template: "%s | Bento Grid Builder for Tailwind CSS | Responsive Layout Generator",
+    default: "Bento Grid Maker: Visual Tailwind CSS Grid Builder for React & Next.js",
   },
 
   description: 
-    "Create stunning bento grid layouts visually with our interactive grid maker tool. Design, customize and export production-ready grid components for Tailwind CSS, React and Next.js.",
+    "Build responsive bento grid layouts visually with our drag-and-drop builder. Generate production-ready Tailwind CSS code for React/Next.js apps in seconds. Export as React components or HTML + CSS.",
 
   openGraph: {
-    title: "Bento Grid Maker | Create Beautiful Grid Layouts with Tailwind CSS",
+    title: "Bento Grid Maker: Drag & Drop Tailwind CSS Layout Builder",
     description:
-      "Create stunning bento grid layouts visually with our interactive grid maker tool. Design, customize and export production-ready grid components.",
-    url: "https://bentotailwind.com/",
+      "Create pixel-perfect bento grids without coding. Visual editor for Tailwind CSS grid layouts with instant React/Next.js component export. Perfect for portfolios, dashboards & galleries.",
+    url: "https://maker.bentotailwind.com/",
     siteName: "Bento Grid Maker",
-    locale: "en_US", 
+    locale: "en_US",
     type: "website",
     images: [
       {
         url: "https://res.cloudinary.com/dknydkolo/image/upload/v1737172798/ScreenShot_Tool_-20250118065946_s8jqwu.png",
         width: 1200,
         height: 630,
-        alt: "Bento Grid Maker Preview",
+        alt: "Bento Grid Maker Interface - Drag & Drop Tailwind CSS Grid Builder",
       },
       {
-        url: "/images/social-banner.png",
+        url: "https://maker.bentotailwind.com/images/social-banner.png",
         width: 1080,
         height: 1080,
-        alt: "Bento Grid Maker Interface",
+        alt: "Create Responsive Grid Layouts with Bento Grid Maker - Export React & HTML Code",
       },
     ],
   },
@@ -51,6 +51,7 @@ export const metadata = {
   robots: {
     index: true,
     follow: true,
+    nocache: false,
     googleBot: {
       index: true,
       follow: true,
@@ -58,17 +59,17 @@ export const metadata = {
       "max-video-preview": -1,
       "max-image-preview": "large",
       "max-snippet": -1,
+      "translate": "notranslate",
     },
   },
 
   twitter: {
     card: "summary_large_image",
-    title: "Bento Grid Maker | Create Beautiful Grid Layouts with Tailwind CSS",
-    description:
-      "Design stunning bento grid layouts visually with our interactive grid maker tool. Customize and export production-ready components instantly.",
+    title: "Build Bento Grids Visually - Tailwind CSS Code Generator",
+    description: "Turn grid layout ideas into production-ready Tailwind CSS code in minutes. Export as React components or pure HTML/CSS. #TailwindCSS #WebDev",
     images: {
-      url: "https://res.cloudinary.com/dknydkolo/image/upload/v1737172798/ScreenShot_Tool_-20250118065946_s8jqwu.png",
-      alt: "Bento Grid Maker Preview",
+      url: "https://maker.bentotailwind.com/images/twitter-preview.png",
+      alt: "Bento Grid Maker Twitter Preview - Visual Grid Builder for Developers",
     },
   },
 };
