@@ -33,7 +33,7 @@ export function Navbar() {
 
   return (
     <nav className="border-b border-gray-800 bg-black text-white sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-24">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
         <div className="flex h-16 items-center justify-between">
           <Link href="/" className="text-xl font-bold tracking-tight hover:text-gray-300 transition-colors">
             Bento Grid Maker

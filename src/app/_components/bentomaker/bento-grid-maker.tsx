@@ -7,6 +7,8 @@ import { toast } from "sonner";
 import { ControlPanel } from './control-panel';
 import { GridPreview } from './grid-preview';
 import { getGeneratedCode } from './utils';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 export interface IGridItem {
   id: string;
@@ -155,9 +157,28 @@ const BentoGridMaker: FC = () => {
             </Button>
           </CardHeader>
           <CardContent>
-            <pre className="bg-gray-950 rounded-lg p-4 overflow-auto text-gray-200 max-h-32">
-              <code>{getGeneratedCode(gridSettings)}</code>
-            </pre>
+            <div className="relative">
+              <SyntaxHighlighter
+                language="jsx"
+                style={vscDarkPlus}
+                customStyle={{
+                  background: '#030712',
+                  padding: '1.5rem',
+                  borderRadius: '0.5rem',
+                  maxHeight: '400px',
+                }}
+                className="!bg-gray-950 !m-0"
+              >
+                {getGeneratedCode(gridSettings)}
+              </SyntaxHighlighter>
+              <div className="absolute top-3 right-3 flex items-center gap-2">
+                <div className="flex gap-1.5">
+                  <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                  <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                  <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                </div>
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>

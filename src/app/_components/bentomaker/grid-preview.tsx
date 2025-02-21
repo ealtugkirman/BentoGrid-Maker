@@ -26,10 +26,27 @@ export const GridPreview: FC<IGridPreviewProps> = ({ gridSettings, onItemUpdate 
   const { columns, rows, gap, cornerType, useImages, aspectRatio, items } = gridSettings;
   const [selectedItemIndex, setSelectedItemIndex] = useState<number | null>(null);
 
+  const handleItemUpdate = (index: number, updates: Partial<{
+    rowSpan: number;
+    colSpan: number;
+    aspectRatio: string;
+    cornerType: CornerType;
+  }>) => {
+    // Validate the requested spans don't exceed grid dimensions
+    const requestedRowSpan = Math.min(updates.rowSpan || 1, rows);
+    const requestedColSpan = Math.min(updates.colSpan || 1, columns);
+    
+    onItemUpdate(index, {
+      ...updates,
+      rowSpan: requestedRowSpan,
+      colSpan: requestedColSpan,
+    });
+  };
+
   const gridStyle = {
     display: 'grid',
     gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
-    gridTemplateRows: `repeat(${rows}, minmax(0, 1fr))`,
+    gridTemplateRows: `repeat(${rows}, minmax(100px, 1fr))`,
     gap: `${gap * 0.25}rem`,
   };
 
@@ -43,29 +60,11 @@ export const GridPreview: FC<IGridPreviewProps> = ({ gridSettings, onItemUpdate 
     setSelectedItemIndex(null);
   };
 
-  const handleApplyToAll = (updates: Partial<{
-    rowSpan: number;
-    colSpan: number;
-    aspectRatio: string;
-    cornerType: CornerType;
-  }>) => {
-    const totalItems = columns * rows;
-    Array.from({ length: totalItems }).forEach((_, i) => {
-      onItemUpdate(i, {
-        rowSpan: updates.rowSpan || 1,
-        colSpan: updates.colSpan || 1,
-        aspectRatio: updates.aspectRatio || aspectRatio,
-        cornerType: updates.cornerType || cornerType,
-      });
-    });
-    toast.success("Applied to all grid items!");
-  };
-
   return (
     <>
       <div 
         style={gridStyle} 
-        className="h-full w-full bg-gray-900 rounded-lg p-4 overflow-auto min-h-0"
+        className="h-full w-full bg-gray-950 rounded-lg p-4 overflow-auto min-h-0"
       >
         {Array.from({ length: columns * rows }).map((_, index) => {
           const itemSettings = items[index] || {
@@ -77,8 +76,8 @@ export const GridPreview: FC<IGridPreviewProps> = ({ gridSettings, onItemUpdate 
           };
 
           const itemStyle = {
-            gridRow: `span ${itemSettings.rowSpan}`,
-            gridColumn: `span ${itemSettings.colSpan}`,
+            gridRow: `span ${itemSettings.rowSpan || 1}`,
+            gridColumn: `span ${itemSettings.colSpan || 1}`,
           };
 
           const cornerClass = itemSettings.cornerType === 'none' ? '' : `rounded-${itemSettings.cornerType}`;
@@ -90,11 +89,12 @@ export const GridPreview: FC<IGridPreviewProps> = ({ gridSettings, onItemUpdate 
               style={itemStyle}
               onClick={(e) => handleItemClick(index, e)}
               className={`
-                bg-gray-800 border border-gray-700
+                bg-gray-900 border border-gray-800
                 flex items-center justify-center p-4 
                 ${cornerClass} ${aspectRatioClass}
                 transition-all duration-200 hover:opacity-80
                 cursor-pointer relative z-0
+                min-h-[100px] // Add minimum height
               `}
             >
               {useImages ? (
@@ -105,10 +105,10 @@ export const GridPreview: FC<IGridPreviewProps> = ({ gridSettings, onItemUpdate 
                   loading="lazy"
                 />
               ) : (
-                <span className="text-sm text-gray-400">
+                <span className="text-sm text-gray-200">
                   Grid Item {index + 1}
                   <br />
-                  {itemSettings.colSpan}x{itemSettings.rowSpan}
+                  {itemSettings.colSpan || 1}x{itemSettings.rowSpan || 1}
                 </span>
               )}
             </div>
@@ -121,29 +121,10 @@ export const GridPreview: FC<IGridPreviewProps> = ({ gridSettings, onItemUpdate 
         onOpenChange={handleDialogClose}
       >
         <DialogContent className="bg-gray-900 border-gray-800 z-50">
-          <DialogHeader className="flex flex-row items-center justify-between">
-            <DialogTitle className="text-white">
+          <DialogHeader>
+            <DialogTitle className="text-gray-100">
               Edit Grid Item {selectedItemIndex !== null ? selectedItemIndex + 1 : ''}
             </DialogTitle>
-            {selectedItemIndex !== null && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => {
-                  if (selectedItemIndex === null) return;
-                  const currentItem = items[selectedItemIndex] || {
-                    rowSpan: 1,
-                    colSpan: 1,
-                    aspectRatio,
-                    cornerType,
-                  };
-                  handleApplyToAll(currentItem);
-                }}
-                className="border-gray-800 text-gray-200 hover:bg-gray-900"
-              >
-                Apply to All
-              </Button>
-            )}
           </DialogHeader>
           
           {selectedItemIndex !== null && (
@@ -155,7 +136,7 @@ export const GridPreview: FC<IGridPreviewProps> = ({ gridSettings, onItemUpdate 
                   onValueChange={(v) => {
                     const value = parseInt(v);
                     if (!isNaN(value)) {
-                      onItemUpdate(selectedItemIndex, { colSpan: value });
+                      handleItemUpdate(selectedItemIndex, { colSpan: value });
                     }
                   }}
                   options={ITEM_SPAN_OPTIONS.map(n => ({ value: n.toString(), label: `Span ${n}` }))}
@@ -167,7 +148,7 @@ export const GridPreview: FC<IGridPreviewProps> = ({ gridSettings, onItemUpdate 
                   onValueChange={(v) => {
                     const value = parseInt(v);
                     if (!isNaN(value)) {
-                      onItemUpdate(selectedItemIndex, { rowSpan: value });
+                      handleItemUpdate(selectedItemIndex, { rowSpan: value });
                     }
                   }}
                   options={ITEM_SPAN_OPTIONS.map(n => ({ value: n.toString(), label: `Span ${n}` }))}
@@ -177,7 +158,7 @@ export const GridPreview: FC<IGridPreviewProps> = ({ gridSettings, onItemUpdate 
                   label="Aspect Ratio"
                   value={items[selectedItemIndex]?.aspectRatio || aspectRatio}
                   onValueChange={(v) => {
-                    onItemUpdate(selectedItemIndex, { aspectRatio: v });
+                    handleItemUpdate(selectedItemIndex, { aspectRatio: v });
                   }}
                   options={ASPECT_RATIO_OPTIONS}
                 />
@@ -186,27 +167,26 @@ export const GridPreview: FC<IGridPreviewProps> = ({ gridSettings, onItemUpdate 
                   label="Corner Style"
                   value={items[selectedItemIndex]?.cornerType || cornerType}
                   onValueChange={(v) => {
-                    onItemUpdate(selectedItemIndex, { cornerType: v as CornerType });
+                    handleItemUpdate(selectedItemIndex, { cornerType: v as CornerType });
                   }}
                   options={CORNER_OPTIONS}
                 />
               </div>
 
-              <div className="flex justify-between items-center pt-4 border-t border-gray-800">
+              <div className="flex justify-between items-center pt-4 border-t border-gray-700">
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={() => {
                     if (selectedItemIndex === null) return;
-                    onItemUpdate(selectedItemIndex, {
+                    handleItemUpdate(selectedItemIndex, {
                       rowSpan: 1,
                       colSpan: 1,
                       aspectRatio: aspectRatio,
                       cornerType: cornerType,
                     });
-                    toast.success("Reset this item to default!");
                   }}
-                  className="border-gray-800 text-gray-200 hover:bg-gray-900"
+                  className="border-gray-700 text-gray-100 hover:bg-gray-800"
                 >
                   Reset This Item
                 </Button>
@@ -218,4 +198,3 @@ export const GridPreview: FC<IGridPreviewProps> = ({ gridSettings, onItemUpdate 
     </>
   );
 };
-

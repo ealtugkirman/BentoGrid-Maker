@@ -11,7 +11,7 @@ const page = () => {
     <div className="min-h-screen bg-black flex flex-col">
       <BackGround />
       <div className="py-4">
-        <h1 className="text-balance text-center text-white text-4xl font-semibold leading-none tracking-tighter sm:text-5xl">
+        <h1 className="text-balance text-center text-white text-4xl font-semibold leading-none tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
           Bento Grid {" "}
           <LineShadowText className="" shadowColor={shadowColor}>
             Maker 

@@ -75,7 +75,7 @@ const BentoGridMaker: FC = () => {
             </CardContent>
           </Card>
 
-          <Card>
+          {/* <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Generated Code</CardTitle>
               <Button
@@ -100,7 +100,7 @@ const BentoGridMaker: FC = () => {
                 <code>{getGeneratedCode(gridSettings)}</code>
               </pre>
             </CardContent>
-          </Card>
+          </Card> */}
         </div>
       </div>
     </div>
