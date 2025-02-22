@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { IGridSettings, CornerType } from './bento-grid-maker';
+import { IGridSettings, CornerType, BorderStyle, BorderColor } from './bento-grid-maker';
 import { getAspectRatioClass } from './utils';
 import {
   Dialog,
@@ -8,9 +8,11 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { SelectField } from './select-field';
-import { ASPECT_RATIO_OPTIONS, CORNER_OPTIONS, ITEM_SPAN_OPTIONS } from './constants';
+import { ASPECT_RATIO_OPTIONS, BORDER_STYLE_OPTIONS, CORNER_OPTIONS, ITEM_SPAN_OPTIONS } from './constants';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
+import { BORDER_COLOR_OPTIONS } from './constants';
+import { Label } from '@/components/ui/label';
 
 interface IGridPreviewProps {
   gridSettings: IGridSettings;
@@ -19,6 +21,8 @@ interface IGridPreviewProps {
     colSpan: number;
     aspectRatio: string;
     cornerType: CornerType;
+    borderStyle: BorderStyle;
+    borderColor: BorderColor;
   }>) => void;
 }
 
@@ -31,6 +35,8 @@ export const GridPreview: FC<IGridPreviewProps> = ({ gridSettings, onItemUpdate 
     colSpan: number;
     aspectRatio: string;
     cornerType: CornerType;
+    borderStyle: BorderStyle;
+    borderColor: BorderColor;
   }>) => {
     // Validate the requested spans don't exceed grid dimensions
     const requestedRowSpan = Math.min(updates.rowSpan || 1, rows);
@@ -60,6 +66,20 @@ export const GridPreview: FC<IGridPreviewProps> = ({ gridSettings, onItemUpdate 
     setSelectedItemIndex(null);
   };
 
+  const getBorderClass = (borderStyle: BorderStyle, borderColor: BorderColor) => {
+    if (borderStyle === 'none') return '';
+    
+    const borderWidth = {
+      thin: 'border',
+      medium: 'border-2',
+      thick: 'border-4',
+    }[borderStyle];
+
+    const colorClass = BORDER_COLOR_OPTIONS.find(opt => opt.value === borderColor)?.class || 'border-gray-700';
+    
+    return `${borderWidth} ${colorClass}`;
+  };
+
   return (
     <>
       <div 
@@ -73,6 +93,8 @@ export const GridPreview: FC<IGridPreviewProps> = ({ gridSettings, onItemUpdate 
             colSpan: 1,
             aspectRatio: aspectRatio,
             cornerType: cornerType,
+            borderStyle: gridSettings.borderStyle,
+            borderColor: gridSettings.borderColor,
           };
 
           const itemStyle = {
@@ -83,14 +105,19 @@ export const GridPreview: FC<IGridPreviewProps> = ({ gridSettings, onItemUpdate 
           const cornerClass = itemSettings.cornerType === 'none' ? '' : `rounded-${itemSettings.cornerType}`;
           const aspectRatioClass = getAspectRatioClass(itemSettings.aspectRatio);
 
+          const borderClass = getBorderClass(
+            itemSettings.borderStyle || gridSettings.borderStyle,
+            itemSettings.borderColor || gridSettings.borderColor
+          );
+
           return (
             <div
               key={itemSettings.id}
               style={itemStyle}
               onClick={(e) => handleItemClick(index, e)}
               className={`
-                bg-gray-900 border border-gray-800
-                flex items-stretch justify-center 
+                bg-gray-900 
+                ${borderClass}
                 ${cornerClass}
                 transition-all duration-200 hover:opacity-80
                 cursor-pointer relative z-0
@@ -144,6 +171,7 @@ export const GridPreview: FC<IGridPreviewProps> = ({ gridSettings, onItemUpdate 
                     }
                   }}
                   options={ITEM_SPAN_OPTIONS.map(n => ({ value: n.toString(), label: `Span ${n}` }))}
+                  small
                 />
                 
                 <SelectField
@@ -156,26 +184,54 @@ export const GridPreview: FC<IGridPreviewProps> = ({ gridSettings, onItemUpdate 
                     }
                   }}
                   options={ITEM_SPAN_OPTIONS.map(n => ({ value: n.toString(), label: `Span ${n}` }))}
+                  small
                 />
 
                 <SelectField
                   label="Aspect Ratio"
                   value={items[selectedItemIndex]?.aspectRatio || aspectRatio}
-                  onValueChange={(v) => {
-                    handleItemUpdate(selectedItemIndex, { aspectRatio: v });
-                  }}
+                  onValueChange={(v) => handleItemUpdate(selectedItemIndex, { aspectRatio: v })}
                   options={ASPECT_RATIO_OPTIONS}
+                  small
                 />
 
                 <SelectField
                   label="Corner Style"
                   value={items[selectedItemIndex]?.cornerType || cornerType}
-                  onValueChange={(v) => {
-                    handleItemUpdate(selectedItemIndex, { cornerType: v as CornerType });
-                  }}
+                  onValueChange={(v) => handleItemUpdate(selectedItemIndex, { cornerType: v as CornerType })}
                   options={CORNER_OPTIONS}
+                  small
+                />
+
+                <SelectField
+                  label="Border Style"
+                  value={items[selectedItemIndex]?.borderStyle || gridSettings.borderStyle}
+                  onValueChange={(v) => handleItemUpdate(selectedItemIndex, { borderStyle: v as BorderStyle })}
+                  options={BORDER_STYLE_OPTIONS}
+                  small
                 />
               </div>
+
+              {(items[selectedItemIndex]?.borderStyle || gridSettings.borderStyle) !== 'none' && (
+                <div className="space-y-2">
+                  <Label className="text-gray-200 text-sm">Border Color</Label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {BORDER_COLOR_OPTIONS.map(({ value, class: borderClass }) => (
+                      <button
+                        key={value}
+                        onClick={() => handleItemUpdate(selectedItemIndex, { borderColor: value as BorderColor })}
+                        className={`
+                          h-8 rounded border-2 transition-all
+                          ${borderClass}
+                          ${(items[selectedItemIndex]?.borderColor || gridSettings.borderColor) === value 
+                            ? 'ring-2 ring-white ring-offset-2 ring-offset-black' 
+                            : ''}
+                        `}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
 
               <div className="flex justify-between items-center pt-4 border-t border-gray-700">
                 <Button
@@ -188,6 +244,8 @@ export const GridPreview: FC<IGridPreviewProps> = ({ gridSettings, onItemUpdate 
                       colSpan: 1,
                       aspectRatio: aspectRatio,
                       cornerType: cornerType,
+                      borderStyle: gridSettings.borderStyle,
+                      borderColor: gridSettings.borderColor,
                     });
                   }}
                   className="border-gray-700 text-gray-100 hover:bg-gray-800"

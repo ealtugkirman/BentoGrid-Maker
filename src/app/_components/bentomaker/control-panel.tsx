@@ -8,11 +8,12 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { IGridSettings, CornerType } from "./bento-grid-maker";
+import { IGridSettings, CornerType, BorderStyle, BorderColor } from "./bento-grid-maker";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SelectField } from "./select-field";
 import { ASPECT_RATIO_OPTIONS, CORNER_OPTIONS } from "./constants";
 import { Slider } from "@/components/ui/slider";
+import { BORDER_STYLE_OPTIONS, BORDER_COLOR_OPTIONS } from './constants';
 
 // Constants for slider limits
 const COLUMN_LIMITS = { min: 1, max: 6, default: 3 };
@@ -116,12 +117,43 @@ export const ControlPanel: FC<IControlPanelProps> = ({
       {/* Style Section */}
       <div className="space-y-4">
         <h2 className="text-lg font-semibold text-white">Style</h2>
+        
         <SelectField
           label="Corner Style"
           value={cornerType}
           onValueChange={(v) => updateSettings("cornerType", v as CornerType)}
           options={CORNER_OPTIONS}
         />
+
+        {/* New Border Controls */}
+        <div className="space-y-4">
+          <SelectField
+            label="Border Style"
+            value={gridSettings.borderStyle}
+            onValueChange={(v) => updateSettings("borderStyle", v as BorderStyle)}
+            options={BORDER_STYLE_OPTIONS}
+          />
+
+          {gridSettings.borderStyle !== 'none' && (
+            <div className="space-y-2">
+              <Label className="text-gray-200">Border Color</Label>
+              <div className="grid grid-cols-3 gap-2">
+                {BORDER_COLOR_OPTIONS.map(({ value, class: borderClass }) => (
+                  <button
+                    key={value}
+                    onClick={() => updateSettings("borderColor", value as BorderColor)}
+                    className={`
+                      h-8 rounded border-2 transition-all
+                      ${borderClass}
+                      ${gridSettings.borderColor === value ? 'ring-2 ring-white ring-offset-2 ring-offset-black' : ''}
+                    `}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
         <div className="flex items-center space-x-2">
           <Switch
             checked={useImages}

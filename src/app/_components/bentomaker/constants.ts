@@ -13,4 +13,20 @@ export const CORNER_OPTIONS = [
   { value: 'md', label: 'Medium' },
   { value: 'lg', label: 'Large' },
   { value: 'full', label: 'Fully Rounded' },
+] as const;
+
+export const BORDER_STYLE_OPTIONS = [
+  { value: 'none', label: 'No Border' },
+  { value: 'thin', label: 'Thin' },
+  { value: 'medium', label: 'Medium' },
+  { value: 'thick', label: 'Thick' },
+] as const;
+
+export const BORDER_COLOR_OPTIONS = [
+  { value: 'gray', label: 'Gray', class: 'border-gray-700' },
+  { value: 'white', label: 'White', class: 'border-white' },
+  { value: 'blue', label: 'Blue', class: 'border-blue-500' },
+  { value: 'green', label: 'Green', class: 'border-green-500' },
+  { value: 'purple', label: 'Purple', class: 'border-purple-500' },
+  { value: 'orange', label: 'Orange', class: 'border-orange-500' },
 ] as const; 
