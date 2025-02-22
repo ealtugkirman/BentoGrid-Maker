@@ -13,6 +13,8 @@ import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { BORDER_COLOR_OPTIONS } from './constants';
 import { Label } from '@/components/ui/label';
+import { BACKGROUND_COLOR_OPTIONS } from './constants';
+import { ColorPicker } from './color-picker';
 
 interface IGridPreviewProps {
   gridSettings: IGridSettings;
@@ -23,6 +25,7 @@ interface IGridPreviewProps {
     cornerType: CornerType;
     borderStyle: BorderStyle;
     borderColor: BorderColor;
+    backgroundColor: string;
   }>) => void;
 }
 
@@ -37,6 +40,7 @@ export const GridPreview: FC<IGridPreviewProps> = ({ gridSettings, onItemUpdate 
     cornerType: CornerType;
     borderStyle: BorderStyle;
     borderColor: BorderColor;
+    backgroundColor: string;
   }>) => {
     // Validate the requested spans don't exceed grid dimensions
     const requestedRowSpan = Math.min(updates.rowSpan || 1, rows);
@@ -95,6 +99,7 @@ export const GridPreview: FC<IGridPreviewProps> = ({ gridSettings, onItemUpdate 
             cornerType: cornerType,
             borderStyle: gridSettings.borderStyle,
             borderColor: gridSettings.borderColor,
+            backgroundColor: gridSettings.backgroundColor,
           };
 
           const itemStyle = {
@@ -113,10 +118,12 @@ export const GridPreview: FC<IGridPreviewProps> = ({ gridSettings, onItemUpdate 
           return (
             <div
               key={itemSettings.id}
-              style={itemStyle}
+              style={{
+                ...itemStyle,
+                backgroundColor: itemSettings.backgroundColor || gridSettings.backgroundColor,
+              }}
               onClick={(e) => handleItemClick(index, e)}
               className={`
-                bg-gray-900 
                 ${borderClass}
                 ${cornerClass}
                 transition-all duration-200 hover:opacity-80
@@ -233,6 +240,14 @@ export const GridPreview: FC<IGridPreviewProps> = ({ gridSettings, onItemUpdate 
                 </div>
               )}
 
+              <ColorPicker
+                label="Background Color"
+                color={items[selectedItemIndex]?.backgroundColor || gridSettings.backgroundColor}
+                onChange={(color) => handleItemUpdate(selectedItemIndex, { 
+                  backgroundColor: color 
+                })}
+              />
+
               <div className="flex justify-between items-center pt-4 border-t border-gray-700">
                 <Button
                   variant="outline"
@@ -246,6 +261,7 @@ export const GridPreview: FC<IGridPreviewProps> = ({ gridSettings, onItemUpdate 
                       cornerType: cornerType,
                       borderStyle: gridSettings.borderStyle,
                       borderColor: gridSettings.borderColor,
+                      backgroundColor: gridSettings.backgroundColor,
                     });
                   }}
                   className="border-gray-700 text-gray-100 hover:bg-gray-800"

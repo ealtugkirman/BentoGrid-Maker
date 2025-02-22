@@ -30,6 +30,7 @@ export interface IGridSettings {
   useImages: boolean;
   aspectRatio: string;
   itemCount: number;
+  backgroundColor: BackgroundColor;
   items: Array<{
     id: string;
     rowSpan: number;
@@ -38,6 +39,7 @@ export interface IGridSettings {
     cornerType: CornerType;
     borderStyle: BorderStyle;
     borderColor: BorderColor;
+    backgroundColor: BackgroundColor;
   }>;
   borderStyle: BorderStyle;
   borderColor: BorderColor;
@@ -46,6 +48,7 @@ export interface IGridSettings {
 export type CornerType = 'none' | 'sm' | 'md' | 'lg' | 'full' | 'custom';
 export type BorderStyle = 'none' | 'thin' | 'medium' | 'thick';
 export type BorderColor = 'gray' | 'white' | 'blue' | 'green' | 'purple' | 'orange';
+export type BackgroundColor = string;
 
 const defaultGridSettings: IGridSettings = {
   columns: 3,
@@ -56,6 +59,7 @@ const defaultGridSettings: IGridSettings = {
   useImages: false,
   aspectRatio: '1:1',
   itemCount: 6,
+  backgroundColor: '#1F2937',
   items: [],
   borderStyle: 'thin',
   borderColor: 'gray',
@@ -96,6 +100,7 @@ const BentoGridMaker: FC = () => {
     cornerType: CornerType;
     borderStyle: BorderStyle;
     borderColor: BorderColor;
+    backgroundColor: BackgroundColor;
   }>) => {
     setGridSettings(prev => {
       const newItems = [...(prev.items || [])];
@@ -108,6 +113,7 @@ const BentoGridMaker: FC = () => {
         cornerType: updates.cornerType ?? newItems[index]?.cornerType ?? prev.cornerType,
         borderStyle: updates.borderStyle ?? newItems[index]?.borderStyle ?? prev.borderStyle,
         borderColor: updates.borderColor ?? newItems[index]?.borderColor ?? prev.borderColor,
+        backgroundColor: updates.backgroundColor ?? newItems[index]?.backgroundColor ?? prev.backgroundColor,
       };
       return { ...prev, items: newItems };
     });

@@ -29,4 +29,13 @@ export const BORDER_COLOR_OPTIONS = [
   { value: 'green', label: 'Green', class: 'border-green-500' },
   { value: 'purple', label: 'Purple', class: 'border-purple-500' },
   { value: 'orange', label: 'Orange', class: 'border-orange-500' },
+] as const;
+
+export const BACKGROUND_COLOR_OPTIONS = [
+  { value: 'gray-900', label: 'Gray', class: 'bg-gray-900' },
+  { value: 'gray-800', label: 'Light Gray', class: 'bg-gray-800' },
+  { value: 'blue-900', label: 'Blue', class: 'bg-blue-900' },
+  { value: 'green-900', label: 'Green', class: 'bg-green-900' },
+  { value: 'purple-900', label: 'Purple', class: 'bg-purple-900' },
+  { value: 'orange-900', label: 'Orange', class: 'bg-orange-900' },
 ] as const; 
