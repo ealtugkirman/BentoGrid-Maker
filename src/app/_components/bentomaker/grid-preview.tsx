@@ -23,7 +23,7 @@ interface IGridPreviewProps {
 }
 
 export const GridPreview: FC<IGridPreviewProps> = ({ gridSettings, onItemUpdate }) => {
-  const { columns, rows, gap, cornerType, useImages, aspectRatio, items } = gridSettings;
+  const { columns, rows, gap, cornerType, useImages, aspectRatio, items, itemCount } = gridSettings;
   const [selectedItemIndex, setSelectedItemIndex] = useState<number | null>(null);
 
   const handleItemUpdate = (index: number, updates: Partial<{
@@ -46,7 +46,7 @@ export const GridPreview: FC<IGridPreviewProps> = ({ gridSettings, onItemUpdate 
   const gridStyle = {
     display: 'grid',
     gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
-    gridTemplateRows: `repeat(${rows}, minmax(100px, 1fr))`,
+    gridTemplateRows: `repeat(${rows}, minmax(120px, 1fr))`,
     gap: `${gap * 0.25}rem`,
   };
 
@@ -64,9 +64,9 @@ export const GridPreview: FC<IGridPreviewProps> = ({ gridSettings, onItemUpdate 
     <>
       <div 
         style={gridStyle} 
-        className="h-full w-full bg-gray-950 rounded-lg p-4 overflow-auto min-h-0"
+        className="h-full w-full bg-gray-950 rounded-lg p-4 overflow-auto"
       >
-        {Array.from({ length: columns * rows }).map((_, index) => {
+        {Array.from({ length: itemCount }).map((_, index) => {
           const itemSettings = items[index] || {
             id: `item-${index + 1}`,
             rowSpan: 1,
@@ -90,27 +90,31 @@ export const GridPreview: FC<IGridPreviewProps> = ({ gridSettings, onItemUpdate 
               onClick={(e) => handleItemClick(index, e)}
               className={`
                 bg-gray-900 border border-gray-800
-                flex items-center justify-center p-4 
-                ${cornerClass} ${aspectRatioClass}
+                flex items-stretch justify-center 
+                ${cornerClass}
                 transition-all duration-200 hover:opacity-80
                 cursor-pointer relative z-0
-                min-h-[100px] // Add minimum height
+                h-full
               `}
             >
-              {useImages ? (
-                <img
-                  src={`https://source.unsplash.com/random/800x600?sig=${index}`}
-                  alt={`Grid item ${index + 1}`}
-                  className={`w-full h-full object-cover ${cornerClass}`}
-                  loading="lazy"
-                />
-              ) : (
-                <span className="text-sm text-gray-200">
-                  Grid Item {index + 1}
-                  <br />
-                  {itemSettings.colSpan || 1}x{itemSettings.rowSpan || 1}
-                </span>
-              )}
+              <div className={`w-full h-full ${aspectRatioClass} p-4`}>
+                {useImages ? (
+                  <img
+                    src={`https://source.unsplash.com/random/800x600?sig=${index}`}
+                    alt={`Grid item ${index + 1}`}
+                    className={`w-full h-full object-cover ${cornerClass}`}
+                    loading="lazy"
+                  />
+                ) : (
+                  <div className="flex flex-col items-center justify-center h-full">
+                    <span className="text-sm text-gray-200">
+                      Grid Item {index + 1}
+                      <br />
+                      {itemSettings.colSpan || 1}x{itemSettings.rowSpan || 1}
+                    </span>
+                  </div>
+                )}
+              </div>
             </div>
           );
         })}

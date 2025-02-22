@@ -27,6 +27,7 @@ export interface IGridSettings {
   cornerCustom: number;
   useImages: boolean;
   aspectRatio: string;
+  itemCount: number;
   items: Array<{
     id: string;
     rowSpan: number;
@@ -46,7 +47,8 @@ const defaultGridSettings: IGridSettings = {
   cornerCustom: 0,
   useImages: false,
   aspectRatio: '1:1',
-  items: [], // Will be populated based on grid size
+  itemCount: 6,
+  items: [],
 };
 
 const BentoGridMaker: FC = () => {
@@ -132,7 +134,7 @@ const BentoGridMaker: FC = () => {
           <CardHeader className="flex-none">
             <CardTitle className="text-white">Preview</CardTitle>
           </CardHeader>
-          <CardContent className="flex-1 min-h-0">
+          <CardContent className="flex-1 min-h-0 h-[calc(100vh-400px)]"> {/* Adjust the 400px value based on your needs */}
             <GridPreview 
               gridSettings={gridSettings} 
               onItemUpdate={handleItemUpdate}

@@ -1,13 +1,16 @@
 import { IGridSettings } from './bento-grid-maker';
 
 export const getAspectRatioClass = (ratio: string) => {
-  switch (ratio) {
-    case '16:9': return 'aspect-video';
-    case '4:3': return 'aspect-4/3';
-    case '3:2': return 'aspect-3/2';
-    case '2:1': return 'aspect-2/1';
-    default: return 'aspect-square';
-  }
+  const aspectRatioClasses = {
+    '1:1': 'aspect-square',
+    '16:9': 'aspect-video',
+    '4:3': 'aspect-[4/3]',
+    '2:3': 'aspect-[2/3]',
+    '3:2': 'aspect-[3/2]',
+    'auto': '',
+  };
+
+  return aspectRatioClasses[ratio as keyof typeof aspectRatioClasses] || '';
 };
 
 export const getGeneratedCode = (settings: IGridSettings) => {
