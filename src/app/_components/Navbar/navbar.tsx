@@ -40,6 +40,7 @@ export function Navbar() {
           </Link>
           <div className="hidden md:flex items-center space-x-8">
             <NavLink href="https://www.bentotailwind.com/components">Components</NavLink>
+
             <Button variant="outline" size="sm" asChild className="bg-gray-900 hover:bg-gray-800 transition-colors">
               <a
                 href="https://github.com/ealtugkirman/BentoGrid-Maker"
