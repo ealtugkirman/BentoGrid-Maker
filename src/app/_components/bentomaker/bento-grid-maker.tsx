@@ -1,5 +1,5 @@
 "use client"
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CopyIcon, CheckIcon, RefreshCwIcon } from 'lucide-react';
@@ -21,6 +21,13 @@ export interface IGridItem {
   borderColor: BorderColor;
 }
 
+export interface TextStyle {
+  size: 'xs' | 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl';
+  weight: 'normal' | 'medium' | 'semibold' | 'bold';
+  align: 'left' | 'center' | 'right';
+  transform: 'none' | 'uppercase' | 'lowercase' | 'capitalize';
+}
+
 export interface IGridSettings {
   columns: number;
   rows: number;
@@ -40,6 +47,9 @@ export interface IGridSettings {
     borderStyle: BorderStyle;
     borderColor: BorderColor;
     backgroundColor: BackgroundColor;
+    text: string;
+    textColor: string;
+    textStyle: TextStyle;
   }>;
   borderStyle: BorderStyle;
   borderColor: BorderColor;
@@ -68,17 +78,18 @@ const defaultGridSettings: IGridSettings = {
 const BentoGridMaker: FC = () => {
   const [gridSettings, setGridSettings] = useState<IGridSettings>(defaultGridSettings);
   const [copied, setCopied] = useState(false);
+  const [generatedCode, setGeneratedCode] = useState('');
+
+  useEffect(() => {
+    const code = getGeneratedCode(gridSettings);
+    setGeneratedCode(code);
+  }, [gridSettings]);
 
   const handleCopyCode = () => {
-    navigator.clipboard.writeText(getGeneratedCode(gridSettings));
+    navigator.clipboard.writeText(generatedCode);
     setCopied(true);
     toast.success("Code copied to clipboard!");
     setTimeout(() => setCopied(false), 2000);
-  };
-
-  const handleResetSettings = () => {
-    setGridSettings(defaultGridSettings);
-    toast.info("Settings reset to default");
   };
 
   const handleGridDimensionChange = (key: 'rows' | 'columns', value: number) => {
@@ -101,6 +112,9 @@ const BentoGridMaker: FC = () => {
     borderStyle: BorderStyle;
     borderColor: BorderColor;
     backgroundColor: BackgroundColor;
+    text: string;
+    textColor: string;
+    textStyle: TextStyle;
   }>) => {
     setGridSettings(prev => {
       const newItems = [...(prev.items || [])];
@@ -114,6 +128,14 @@ const BentoGridMaker: FC = () => {
         borderStyle: updates.borderStyle ?? newItems[index]?.borderStyle ?? prev.borderStyle,
         borderColor: updates.borderColor ?? newItems[index]?.borderColor ?? prev.borderColor,
         backgroundColor: updates.backgroundColor ?? newItems[index]?.backgroundColor ?? prev.backgroundColor,
+        text: updates.text ?? newItems[index]?.text ?? '',
+        textColor: updates.textColor ?? newItems[index]?.textColor ?? '#000',
+        textStyle: updates.textStyle ?? newItems[index]?.textStyle ?? {
+          size: 'base',
+          weight: 'normal',
+          align: 'left',
+          transform: 'none',
+        },
       };
       return { ...prev, items: newItems };
     });
@@ -127,49 +149,40 @@ const BentoGridMaker: FC = () => {
           <CardHeader className="sticky top-0 z-10 bg-black">
             <CardTitle className="text-white">Control Panel</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-6">
-            <ControlPanel 
-              gridSettings={gridSettings} 
+          <CardContent>
+            <ControlPanel
+              gridSettings={gridSettings}
               onChange={setGridSettings}
               onDimensionChange={handleGridDimensionChange}
             />
-            <div className="flex justify-end">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleResetSettings}
-                className="border-gray-800 text-gray-200 hover:bg-gray-900"
-              >
-                <RefreshCwIcon className="h-4 w-4 mr-2" />
-                Reset
-              </Button>
-            </div>
           </CardContent>
         </Card>
       </div>
 
       {/* Main Content Area */}
-      <div className="flex flex-col gap-4 min-h-0 w-[calc(100vw-24rem)]"> {/* 24rem = 320px (w-80) + padding + gap */}
-        <Card className="bg-black border-gray-800 flex-1 min-h-0">
+      <div className="flex-1 flex flex-col gap-4 min-h-0 overflow-hidden">
+        <Card className="bg-black border-gray-800 flex-1">
           <CardHeader className="flex-none">
             <CardTitle className="text-white">Preview</CardTitle>
           </CardHeader>
-          <CardContent className="flex-1 min-h-0 h-[calc(100vh-400px)]"> {/* Adjust the 400px value based on your needs */}
-            <GridPreview 
-              gridSettings={gridSettings} 
-              onItemUpdate={handleItemUpdate}
-            />
+          <CardContent className="h-[calc(100vh-24rem)]">
+            <div className="max-w-[900px] mx-auto h-full">
+              <GridPreview
+                gridSettings={gridSettings}
+                onItemUpdate={handleItemUpdate}
+              />
+            </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-black border-gray-800 flex-none">
+        <Card className="bg-black border-gray-800">
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle className="text-white">Generated Code</CardTitle>
             <Button
               variant="outline"
               size="sm"
               onClick={handleCopyCode}
-              className="border-gray-800 text-gray-200 hover:bg-gray-900"
+              className="border-gray-800 text-gray-200 hover:bg-gray-800"
             >
               {copied ? (
                 <CheckIcon className="h-4 w-4" />
@@ -181,17 +194,18 @@ const BentoGridMaker: FC = () => {
           <CardContent>
             <div className="relative">
               <SyntaxHighlighter
-                language="jsx"
+                language="html"
                 style={vscDarkPlus}
                 customStyle={{
                   background: '#030712',
-                  padding: '1.5rem',
+                  padding: '1rem',
                   borderRadius: '0.5rem',
-                  maxHeight: '400px',
+                  maxHeight: '8rem',
+                  fontSize: '0.875rem',
                 }}
                 className="!bg-gray-950 !m-0"
               >
-                {getGeneratedCode(gridSettings)}
+                {generatedCode}
               </SyntaxHighlighter>
               <div className="absolute top-3 right-3 flex items-center gap-2">
                 <div className="flex gap-1.5">
